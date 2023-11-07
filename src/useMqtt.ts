@@ -5,7 +5,6 @@ const protocol = "wss";
 const port = 8884;
 const setting = {
   url: `${protocol}://47d03602ea8a4cd1b53c740277fc019e.s1.eu.hivemq.cloud:${port}/mqtt`,
-  // 47d03602ea8a4cd1b53c740277fc019e.s1.eu.hivemq.cloud:8884/mqtt
   config: {
     username: "dev-week",
     password: "End4v4$20.23",
