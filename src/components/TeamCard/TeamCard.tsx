@@ -12,7 +12,8 @@ export const TeamCard = ({
   points = 0,
 }: TeamCardProps): React.ReactElement => {
   const classes = classNames(
-    "basis-1/3 h-full",
+    "h-full mx-auto",
+    "px-24",
     "rounded-md shadow-md",
     "text-center",
     "flex flex-col justify-center gap-1",
@@ -22,8 +23,8 @@ export const TeamCard = ({
   );
   return (
     <div className={classes}>
-      <div className="text-xl font-bold">{teamName}</div>
-      <div className="text-gray-300">{points}</div>
+      <div className="text-3xl font-bold">{teamName}</div>
+      <div className="text-xl text-gray-300">{points}</div>
     </div>
   );
 };

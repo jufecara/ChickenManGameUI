@@ -3,7 +3,7 @@ import { Game } from "./components";
 
 function App() {
   return (
-    <div className="App">
+    <div className="App px-16 mx-auto">
       <Game />
     </div>
   );

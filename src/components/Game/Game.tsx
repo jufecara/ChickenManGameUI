@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
 import useMqtt from "../../useMqtt";
-import { TeamCard } from "../TeamCard";
+
+import {
+  formatPayload,
+  getHostPointsFromPayload,
+  initialTeamPoints,
+  setPointsFromScore,
+} from "./utils";
+import { Score, TeamPoints } from "../../types";
+import { Actions, Console, Dashboard } from "..";
 
 export const Game = (): React.ReactElement => {
   const { mqttSubscribe, payload, isConnected } = useMqtt();
   const [content, setContent] = useState<string[]>(["[topic]: Content"]);
+  const [points, setPoints] = useState<TeamPoints>(initialTeamPoints);
+  const [score, setScore] = useState<Score>({} as Score);
 
   useEffect(() => {
     if (isConnected) {
@@ -13,30 +23,40 @@ export const Game = (): React.ReactElement => {
   }, [mqttSubscribe, isConnected]);
 
   useEffect(() => {
-    setContent((prevState) => {
-      if (!payload) return prevState;
+    if (payload) {
+      setContent((prevState) => {
+        return [...prevState, formatPayload(payload)];
+      });
 
-      return [...prevState, `[${payload.topic}]: ${payload.message}`];
-    });
+      const hostPoints = getHostPointsFromPayload(payload.message);
+      if (hostPoints) {
+        setScore((prevState) => {
+          return { ...prevState, ...hostPoints };
+        });
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [payload]);
+
+  useEffect(() => {
+    if (!score) return;
+
+    setPoints((prevState) => {
+      if (!score) return prevState;
+
+      return setPointsFromScore(score);
+    });
+  }, [score]);
+
+  const handleClearConsole = () => {
+    setContent([""]);
+  };
 
   return (
     <>
-      <div className="font-bold text-2xl text-center p-4">Game Dashboard</div>
-      <div className="score flex flex-row p-2 w-full gap-2 text-white items-center h-48">
-        <TeamCard teamName="red" points={0} />
-        <TeamCard teamName="green" points={0} />
-        <TeamCard teamName="blue" points={0} />
-      </div>
-      <div className="w-full p-2">
-        <div className="rounded-md border-2 h-96 p-4">
-          <div className="h-full border-dashed border-2 border-gray-600 overflow-auto snap-y">
-            {content.map((text) => (
-              <p className="mx-2 snap-end">{text}</p>
-            ))}
-          </div>
-        </div>
-      </div>
+      <Dashboard points={points} />
+      <Console content={content} />
+      <Actions clear={handleClearConsole} reset={() => ({})} />
     </>
   );
 };

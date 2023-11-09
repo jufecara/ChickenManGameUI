@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import * as mqtt from "mqtt";
+import { Payload } from "./types";
 
 const protocol = "wss";
 const port = 8884;
@@ -10,11 +11,6 @@ const setting = {
     password: "End4v4$20.23",
     port,
   },
-};
-
-export type Payload = {
-  topic: string;
-  message: string;
 };
 
 export default function useMqtt() {
