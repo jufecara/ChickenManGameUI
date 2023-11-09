@@ -14,7 +14,7 @@ export const TeamCard = ({
   const classes = classNames(
     "h-full mx-auto",
     "px-24",
-    "rounded-md shadow-md",
+    "rounded-lg shadow-xl",
     "text-center",
     "flex flex-col justify-center gap-1",
     { "bg-red-600": teamName === "red" },
