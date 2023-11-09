@@ -10,13 +10,16 @@ import { Score, TeamPoints } from "../../types";
 import { Actions, Console, Dashboard } from "..";
 import useWebSocket, { ReadyState } from "react-use-websocket";
 
+const PORT = 8001;
+const HOST = "localhost";
+
 export const Game = (): React.ReactElement => {
-  const [content, setContent] = useState<string[]>(["[topic]: Content"]);
+  const [content, setContent] = useState<string[]>([""]);
   const [points, setPoints] = useState<TeamPoints>(initialTeamPoints);
   const [score, setScore] = useState<Score>({} as Score);
 
   const { sendMessage, lastMessage, readyState } = useWebSocket(
-    "ws://localhost:8001",
+    `ws://${HOST}:${PORT}`,
     {
       onOpen: () => {
         console.log("Opened");
