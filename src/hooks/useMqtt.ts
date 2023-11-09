@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import * as mqtt from "mqtt";
-import { Payload } from "./types";
+import { Payload } from "../types";
 
 const protocol = "wss";
 const port = 8884;
@@ -13,7 +13,7 @@ const setting = {
   },
 };
 
-export default function useMqtt() {
+export function useMqtt() {
   const [client, setClient] = useState<mqtt.MqttClient | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [payload, setPayload] = useState<Payload | null>(null);

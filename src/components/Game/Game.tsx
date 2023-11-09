@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import useMqtt from "../../useMqtt";
 
 import {
   formatPayload,
@@ -9,6 +8,7 @@ import {
 } from "./utils";
 import { Score, TeamPoints } from "../../types";
 import { Actions, Console, Dashboard } from "..";
+import { useMqtt } from "../../hooks";
 
 export const Game = (): React.ReactElement => {
   const { mqttSubscribe, payload, isConnected } = useMqtt();
