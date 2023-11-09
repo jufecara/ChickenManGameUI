@@ -8,27 +8,47 @@ import {
 } from "./utils";
 import { Score, TeamPoints } from "../../types";
 import { Actions, Console, Dashboard } from "..";
-import { useMqtt } from "../../hooks";
+import useWebSocket, { ReadyState } from "react-use-websocket";
 
 export const Game = (): React.ReactElement => {
-  const { mqttSubscribe, payload, isConnected } = useMqtt();
   const [content, setContent] = useState<string[]>(["[topic]: Content"]);
   const [points, setPoints] = useState<TeamPoints>(initialTeamPoints);
   const [score, setScore] = useState<Score>({} as Score);
 
-  useEffect(() => {
-    if (isConnected) {
-      mqttSubscribe("dev-week");
+  const { sendMessage, lastMessage, readyState } = useWebSocket(
+    "ws://localhost:8001",
+    {
+      onOpen: () => {
+        console.log("Opened");
+      },
+      onClose: () => {
+        console.log("Closed");
+      },
+      shouldReconnect: () => true,
+      reconnectAttempts: 120,
+      reconnectInterval: (attemptNumber) => {
+        const interval = Math.min(Math.pow(2, attemptNumber) * 1000, 60000);
+        console.log(`Trying to reconnect in: ${interval / 1000} seconds`);
+        return interval;
+      },
     }
-  }, [mqttSubscribe, isConnected]);
+  );
+
+  const connectionStatus = {
+    [ReadyState.CONNECTING]: "Connecting",
+    [ReadyState.OPEN]: "Open",
+    [ReadyState.CLOSING]: "Closing",
+    [ReadyState.CLOSED]: "Closed",
+    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
+  }[readyState];
 
   useEffect(() => {
-    if (payload) {
+    if (lastMessage) {
       setContent((prevState) => {
-        return [...prevState, formatPayload(payload)];
+        return [...prevState, formatPayload(lastMessage)];
       });
 
-      const hostPoints = getHostPointsFromPayload(payload.message);
+      const hostPoints = getHostPointsFromPayload(lastMessage.data);
       if (hostPoints) {
         setScore((prevState) => {
           return { ...prevState, ...hostPoints };
@@ -36,7 +56,7 @@ export const Game = (): React.ReactElement => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [payload]);
+  }, [lastMessage]);
 
   useEffect(() => {
     if (!score) return;
@@ -54,9 +74,9 @@ export const Game = (): React.ReactElement => {
 
   return (
     <>
-      <Dashboard points={points} />
+      <Dashboard points={points} connectionStatus={connectionStatus} />
       <Console content={content} />
-      <Actions clear={handleClearConsole} reset={() => ({})} />
+      <Actions clear={handleClearConsole} reset={() => sendMessage("reset")} />
     </>
   );
 };

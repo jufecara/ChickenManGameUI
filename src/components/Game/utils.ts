@@ -1,4 +1,4 @@
-import { Payload, Score, TeamName } from "../../types";
+import { Score, TeamName } from "../../types";
 
 export const initialTeamPoints = {
   red: 0,
@@ -40,9 +40,7 @@ export const getHostPointsFromPayload = (message: string): Score | null => {
   };
 };
 
-export const formatPayload = (payload: Payload): string => {
+export const formatPayload = (payload: MessageEvent): string => {
   const date = new Date();
-  return `[${date.toLocaleString("es-CO")}][${payload.topic}]: ${
-    payload.message
-  }`;
+  return `[${date.toLocaleString("es-CO")}]: ${payload.data}`;
 };
