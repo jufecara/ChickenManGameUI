@@ -7,7 +7,7 @@ interface ActionsProps {
 
 export const Actions = ({ clear, reset }: ActionsProps): React.ReactElement => {
   return (
-    <>
+    <div className="Actions">
       <div className="font-bold text-2xl p-4">Actions</div>
       <div className="w-full p-2 flex flex-row gap-2">
         <button
@@ -23,6 +23,6 @@ export const Actions = ({ clear, reset }: ActionsProps): React.ReactElement => {
           Reset Game
         </button>
       </div>
-    </>
+    </div>
   );
 };

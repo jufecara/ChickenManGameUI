@@ -76,10 +76,10 @@ export const Game = (): React.ReactElement => {
   };
 
   return (
-    <>
+    <div className="Game flex flex-col gap-6">
       <Dashboard points={points} connectionStatus={connectionStatus} />
       <Console content={content} />
       <Actions clear={handleClearConsole} reset={() => sendMessage("reset")} />
-    </>
+    </div>
   );
 };

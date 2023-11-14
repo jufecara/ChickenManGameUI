@@ -12,7 +12,7 @@ export const TeamCard = ({
   points = 0,
 }: TeamCardProps): React.ReactElement => {
   const classes = classNames(
-    "h-full mx-auto",
+    "h-full mx-auto min-w-1/4",
     "px-24",
     "rounded-lg shadow-xl",
     "text-center",

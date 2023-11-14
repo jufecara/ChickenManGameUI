@@ -12,7 +12,7 @@ export const Console = ({ content }: ConsoleProps): React.ReactElement => {
   }, [content]);
 
   return (
-    <>
+    <div className="Console">
       <div className="font-bold text-2xl p-4">Console</div>
       <div className="w-full p-2">
         <div className="rounded-md border-2 h-96 p-4 bg-white">
@@ -26,6 +26,6 @@ export const Console = ({ content }: ConsoleProps): React.ReactElement => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
