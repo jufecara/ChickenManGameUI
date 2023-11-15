@@ -8,7 +8,7 @@ import {
 } from "./utils";
 import { Score, TeamPoints } from "../../types";
 import { Actions, Console, Dashboard } from "..";
-import useWebSocket, { ReadyState } from "react-use-websocket";
+import useWebSocket from "react-use-websocket";
 
 const PORT = 8001;
 const HOST = "localhost";
@@ -36,14 +36,6 @@ export const Game = (): React.ReactElement => {
       },
     }
   );
-
-  const connectionStatus = {
-    [ReadyState.CONNECTING]: "Connecting",
-    [ReadyState.OPEN]: "Open",
-    [ReadyState.CLOSING]: "Closing",
-    [ReadyState.CLOSED]: "Closed",
-    [ReadyState.UNINSTANTIATED]: "Uninstantiated",
-  }[readyState];
 
   useEffect(() => {
     if (lastMessage) {
@@ -75,11 +67,17 @@ export const Game = (): React.ReactElement => {
     setContent([""]);
   };
 
+  const handleResetGame = () => {
+    setScore({});
+    setContent([""]);
+    sendMessage("reset");
+  };
+
   return (
     <div className="Game flex flex-col gap-6">
-      <Dashboard points={points} connectionStatus={connectionStatus} />
+      <Dashboard points={points} readyState={readyState} />
       <Console content={content} />
-      <Actions clear={handleClearConsole} reset={() => sendMessage("reset")} />
+      <Actions clear={handleClearConsole} reset={handleResetGame} />
     </div>
   );
 };
