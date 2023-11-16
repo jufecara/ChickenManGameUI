@@ -7,3 +7,7 @@ To run dev mode
 To build
 
 > `npm run build`
+
+To run in local
+
+> `npm run build` > `npm run serve`
